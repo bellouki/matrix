@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,17 +16,19 @@ import java.util.Set;
 @Builder
 @ToString(of= {"id","libelle","description","typeSkills","persons"})
 @Entity
-public class Skill {
-
+@Table(name = "skill")
+public class Skill implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	 Long id;
+	@Column(name="libelle")
 	 String libelle;
+	@Column(name="description")
 	 String description;
 
 	@ManyToOne
-	@JoinColumn(name = "typeId")
-	 TypeSkills typeSkills;
+	@JoinColumn(name = "type_id")
+	TypeSkills typeSkills;
 
 	@ManyToMany(fetch = FetchType.LAZY,
 			cascade = {
@@ -34,5 +37,4 @@ public class Skill {
 			},
 			mappedBy = "skills")
 	 Set<Person> persons = new HashSet<>();
-
 }
